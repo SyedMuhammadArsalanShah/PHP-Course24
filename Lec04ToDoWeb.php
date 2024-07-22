@@ -29,6 +29,27 @@ if (isset($_POST["email"])) {
     if ($res) {
         echo "inserted";
     }
+} else if (isset($_POST["emailupdate"])) {
+    # code...
+
+
+
+    $id = $_POST["idupdate"];
+    $emailaddress = $_POST["emailupdate"];
+    $desc = $_POST["descupdate"];
+
+
+
+
+    $update = "UPDATE `info` SET `Email`='$emailaddress',`Description`='$desc' WHERE Id = '$id'";
+
+
+
+    $result = mysqli_query($con, $update);
+
+    if ($result) {
+        echo "updated";
+    }
 }
 
 
@@ -67,7 +88,7 @@ if (isset($_POST["email"])) {
                 </div>
                 <div class="modal-body">
                     <form action="Lec04ToDoWeb.php" method="post">
-
+                        <input type="hidden" name="idupdate" id="userid">
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Email address</label>
                             <input type="email" name="emailupdate" class="form-control" id="emailV" placeholder="name@example.com">
@@ -148,9 +169,9 @@ if (isset($_POST["email"])) {
                     
                     
                     <div class='d-grid gap-2 d-md-block'>
-  <button class='btn btn-primary edit' data-bs-toggle='modal' data-bs-target='#exampleModal' type='button' id=" . $a["Id"] . ">Edit</button>
-  <button class='btn btn-danger' type='button'>Delete</button>
-</div>
+                     <button class='btn btn-primary edit' data-bs-toggle='modal' data-bs-target='#exampleModal' type='button' id=".$a["Id"].">Edit</button>
+                     <button class='btn btn-danger' type='button'>Delete</button>
+                    </div>
                     
                     
                     </td>";
@@ -198,20 +219,17 @@ if (isset($_POST["email"])) {
 
                 title = tr.getElementsByTagName("td")[0].innerText;
                 desc = tr.getElementsByTagName("td")[1].innerText;
-              
+
 
                 console.log(title, desc);
 
-                emailV.value=title;
-                descV.value=desc
+                emailV.value = title;
+                descV.value = desc
+
+                userid.value = i.target.id;
 
 
-
-                
-
-
-
-
+             console.log(i.target.id)
 
             });
 
