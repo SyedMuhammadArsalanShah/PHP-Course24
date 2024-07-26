@@ -5,14 +5,26 @@ $password = "";
 $database = "aptechgls2";
 
 $con = mysqli_connect($server, $username, $password, $database);
-
-
 if (!$con) {
 
 
     die("connection is failed" . mysqli_connect_error());
 }
 
+
+if (isset($_GET["delete"])) {
+
+    $id = $_GET["delete"];
+
+    $delquery = "delete from info where Id ='$id' ";
+
+    $resultdel = mysqli_query($con, $delquery);
+
+    if ($resultdel) {
+        echo "deleted ";
+        header("location:Lec04ToDoWeb.php");
+    }
+}
 
 if (isset($_POST["email"])) {
     $email = $_POST["email"];
@@ -28,6 +40,7 @@ if (isset($_POST["email"])) {
 
     if ($res) {
         echo "inserted";
+ 
     }
 } else if (isset($_POST["emailupdate"])) {
     # code...
@@ -157,11 +170,11 @@ if (isset($_POST["email"])) {
                 //  echo "my data ". var_dump($row)."<br>";
 
 
-
+                 $counter=1;
                 while ($a = mysqli_fetch_assoc($result)) {
 
                     echo "  <tr>";
-                    echo "<th scope='row'>" . $a["Id"] . "</th>";
+                    echo "<th scope='row'>" .$counter++  . "</th>";
                     echo "<td scope='row'>" . $a["Email"] . "</td>";
                     echo "<td scope='row'>" . $a["Description"] . "</td>";
                     echo "<td scope='row'>" . $a["Date"] . "</td>";
@@ -169,8 +182,8 @@ if (isset($_POST["email"])) {
                     
                     
                     <div class='d-grid gap-2 d-md-block'>
-                     <button class='btn btn-primary edit' data-bs-toggle='modal' data-bs-target='#exampleModal' type='button' id=".$a["Id"].">Edit</button>
-                     <button class='btn btn-danger' type='button'>Delete</button>
+                     <button class='btn btn-primary edit' data-bs-toggle='modal' data-bs-target='#exampleModal' type='button' id=" . $a["Id"] . ">Edit</button>
+                     <button class='btn btn-danger  delete' type='button'id=" . $a["Id"] . ">Delete</button>
                     </div>
                     
                     
@@ -205,9 +218,6 @@ if (isset($_POST["email"])) {
 
     <script>
         editkaro = document.getElementsByClassName("edit");
-
-
-
         Array.from(editkaro).forEach((index) => {
 
             index.addEventListener("click", (i) => {
@@ -229,9 +239,43 @@ if (isset($_POST["email"])) {
                 userid.value = i.target.id;
 
 
-             console.log(i.target.id)
+                console.log(i.target.id)
 
             });
+
+
+        });
+
+
+
+
+
+        deletekaro = document.getElementsByClassName("delete");
+
+
+
+        Array.from(deletekaro).forEach((index) => {
+
+            index.addEventListener("click", (i) => {
+
+                console.log("delete is working.....")
+
+
+                sno = i.target.id;
+
+                if (confirm("Kya app delete krna chaty hen ???")) {
+
+                    window.location = `/PhpClasses11f/Lec04ToDoWeb.php?delete=${sno}`
+
+                }
+
+
+
+
+
+            });
+
+
 
 
         });
