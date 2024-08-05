@@ -17,7 +17,7 @@ if (isset($_GET["delete"])) {
 
     if ($resultdel) {
         echo "deleted";
-        header("location:Lec04ToDoWeb.php");
+        // header("location:Lec04ToDoWeb.php");
     }
 }
 

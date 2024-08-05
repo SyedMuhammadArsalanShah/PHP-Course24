@@ -40,6 +40,22 @@ if (isset($_POST["usertitle"])) {
 
 
 
+if (isset($_GET["delete"])) {
+
+    $id = $_GET["delete"];
+
+
+    $sqldel = "delete from info where  Id='$id'";
+
+     $resdel= mysqli_query($con, $sqldel);;
+     if ($resdel) {
+
+          header("location:index.php");
+
+     }
+
+
+}
 
 
 
@@ -64,7 +80,7 @@ if (isset($_POST["usertitle"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 
-           
+
 </head>
 
 <body>
@@ -120,19 +136,20 @@ if (isset($_POST["usertitle"])) {
 
                 $listresult = mysqli_query($con, $select);
 
+                $counter=1;
                 while ($row = mysqli_fetch_assoc($listresult)) {
 
 
                     echo '
                    
                      <tr>
-                    <th scope="row">' . $row["Id"] . '</th>
+                    <th scope="row">' . $counter++ . '</th>
                     <td scope="row">' . $row["Title"] . '</td>
                     <td scope="row">' . $row["Description"] . '</td>
              
                     <td>
                         <button type="button" class="btn btn-success">Edit</button>
-                        <button type="button" class="btn btn-danger">Delete</button></td>
+                        <button type="button" class="btn btn-danger delete" id=' . $row["Id"] . '>Delete</button></td>
                     </tr>
                    
                    ';
@@ -170,7 +187,29 @@ if (isset($_POST["usertitle"])) {
 
 
 
+    <script>
+        deletekaro = document.getElementsByClassName("delete")
 
+
+        Array.from(deletekaro).forEach((index) => {
+            index.addEventListener("click", (apt) => {
+
+                console.log("delete is working ...........khush hojaien sab", );
+
+
+                sno = apt.target.id;
+                if (confirm("kya app data delete karna chatay hen ?")) {
+                    window.location = `/PhpClasses11f/index.php?delete=${sno}`
+                }
+
+
+            });
+
+
+
+
+        });
+    </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
