@@ -23,9 +23,6 @@ if (!$con) {
 
 if (isset($_POST["usertitle"])) {
 
-
-
-
     $title = $_POST["usertitle"];
     $desc = $_POST["userdesc"];
 
@@ -36,8 +33,21 @@ if (isset($_POST["usertitle"])) {
     if ($result) {
         echo "mubarak ho data insert karlia";
     }
-}
+} elseif (isset($_POST["usertitleupdate"])) {
 
+
+
+    $id = $_POST["idupdate"];
+    $titleupdate = $_POST["usertitleupdate"];
+    $descupdate = $_POST["userdescupdate"];
+
+  $sqlupdate = "UPDATE `info` SET `Title`='$titleupdate',`Description`='$descupdate' WHERE Id='$id'";
+
+    $resultup = mysqli_query($con, $sqlupdate);
+    if ($resultup) {
+        echo "updated ";
+    }
+}
 
 
 if (isset($_GET["delete"])) {
@@ -47,14 +57,11 @@ if (isset($_GET["delete"])) {
 
     $sqldel = "delete from info where  Id='$id'";
 
-     $resdel= mysqli_query($con, $sqldel);;
-     if ($resdel) {
+    $resdel = mysqli_query($con, $sqldel);;
+    if ($resdel) {
 
-          header("location:index.php");
-
-     }
-
-
+        header("location:index.php");
+    }
 }
 
 
@@ -85,6 +92,50 @@ if (isset($_GET["delete"])) {
 
 <body>
 
+
+
+
+
+    <!-- Button trigger modal -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="index.php" method="post">
+                        <input type="hidden" name="idupdate" id="idu">
+
+
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Title</label>
+                            <input type="text" class="form-control" name="usertitleupdate" id="tu" placeholder="here is your title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                            <textarea class="form-control" name="userdescupdate" id="du" rows="3"></textarea>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
 
     <div class="container">
 
@@ -136,19 +187,19 @@ if (isset($_GET["delete"])) {
 
                 $listresult = mysqli_query($con, $select);
 
-                $counter=1;
+                $counter = 1;
                 while ($row = mysqli_fetch_assoc($listresult)) {
 
 
                     echo '
                    
                      <tr>
-                    <th scope="row">' . $counter++ . '</th>
+                    <td scope="row">' . $counter++ . '</td>
                     <td scope="row">' . $row["Title"] . '</td>
                     <td scope="row">' . $row["Description"] . '</td>
              
                     <td>
-                        <button type="button" class="btn btn-success">Edit</button>
+                        <button type="button" class="btn btn-success edit " data-bs-toggle="modal" data-bs-target="#exampleModal" id=' . $row["Id"] . '>Edit</button>
                         <button type="button" class="btn btn-danger delete" id=' . $row["Id"] . '>Delete</button></td>
                     </tr>
                    
@@ -188,6 +239,28 @@ if (isset($_GET["delete"])) {
 
 
     <script>
+        editkaro = document.getElementsByClassName("edit")
+
+
+        Array.from(editkaro).forEach((index) => {
+            index.addEventListener("click", (aptgls) => {
+
+                tr = aptgls.target.parentNode.parentNode;
+
+                title = tr.getElementsByTagName("td")[1].innerText;
+                desc = tr.getElementsByTagName("td")[2].innerText;
+
+
+                tu.value = title;
+                du.value = desc;
+                idu.value = aptgls.target.id;
+                console.log(aptgls.target.id)
+                // console.log("edit is working ...........khush hojaien sab", title, desc);
+            });
+        });
+
+
+
         deletekaro = document.getElementsByClassName("delete")
 
 
@@ -195,19 +268,12 @@ if (isset($_GET["delete"])) {
             index.addEventListener("click", (apt) => {
 
                 console.log("delete is working ...........khush hojaien sab", );
-
-
                 sno = apt.target.id;
+
                 if (confirm("kya app data delete karna chatay hen ?")) {
                     window.location = `/PhpClasses11f/index.php?delete=${sno}`
                 }
-
-
             });
-
-
-
-
         });
     </script>
 
