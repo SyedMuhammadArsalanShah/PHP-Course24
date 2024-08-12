@@ -8,6 +8,8 @@ $database = "shaaf";
 
 
 
+
+
 $con = mysqli_connect($server, $username, $password, $database);
 
 
@@ -31,7 +33,8 @@ if (isset($_POST["usertitle"])) {
 
     $result = mysqli_query($con, $sqlins);
     if ($result) {
-        echo "mubarak ho data insert karlia";
+
+        $insert = true;
     }
 } elseif (isset($_POST["usertitleupdate"])) {
 
@@ -41,11 +44,12 @@ if (isset($_POST["usertitle"])) {
     $titleupdate = $_POST["usertitleupdate"];
     $descupdate = $_POST["userdescupdate"];
 
-  $sqlupdate = "UPDATE `info` SET `Title`='$titleupdate',`Description`='$descupdate' WHERE Id='$id'";
+    $sqlupdate = "UPDATE `info` SET `Title`='$titleupdate',`Description`='$descupdate' WHERE Id='$id'";
 
     $resultup = mysqli_query($con, $sqlupdate);
     if ($resultup) {
-        echo "updated ";
+        // echo "updated ";
+        $update = true;
     }
 }
 
@@ -60,6 +64,7 @@ if (isset($_GET["delete"])) {
     $resdel = mysqli_query($con, $sqldel);;
     if ($resdel) {
 
+        $delete = true;
         header("location:index.php");
     }
 }
@@ -86,11 +91,46 @@ if (isset($_GET["delete"])) {
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css">
 
 </head>
 
 <body>
+
+    <?php
+
+
+    if ($insert) {
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Successfully!</strong> Account Successfully created.
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+
+
+    if ($update) {
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Successfully!</strong> Account Successfully created.
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+
+
+    if ($delete) {
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Successfully!</strong> Account Successfully created.
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>";
+    }
+
+
+
+    ?>
+
+
+
+
+
 
 
 
@@ -168,7 +208,7 @@ if (isset($_GET["delete"])) {
         </h1>
 
 
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover" id="myTable">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -276,8 +316,11 @@ if (isset($_GET["delete"])) {
             });
         });
     </script>
-
-
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+    <script>
+        let table = new DataTable('#myTable');
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 

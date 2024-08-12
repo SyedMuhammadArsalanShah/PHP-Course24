@@ -1,9 +1,14 @@
-
 <?php
 $server = "localhost";
 $username = "root";
 $password = "";
 $database = "aptechgls2";
+
+
+
+$insert = false;
+$update = false;
+$delete = false;
 
 $con = mysqli_connect($server, $username, $password, $database);
 if (!$con) {
@@ -16,8 +21,9 @@ if (isset($_GET["delete"])) {
     $resultdel = mysqli_query($con, $delquery);
 
     if ($resultdel) {
-        echo "deleted";
-        // header("location:Lec04ToDoWeb.php");
+        // echo "deleted";
+        header("location:Lec04ToDoWeb.php");
+        $delete = true;
     }
 }
 
@@ -28,7 +34,8 @@ if (isset($_POST["email"])) {
     $res = mysqli_query($con, $sqliinsert);
 
     if ($res) {
-        echo "inserted";
+        // echo "inserted";
+        $insert = true;
     }
 } else if (isset($_POST["emailupdate"])) {
     $id = $_POST["idupdate"];
@@ -38,7 +45,8 @@ if (isset($_POST["email"])) {
     $result = mysqli_query($con, $update);
 
     if ($result) {
-        echo "updated";
+        // echo "updated";
+        $update = true;
     }
 }
 ?>
@@ -51,9 +59,45 @@ if (isset($_POST["email"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css">
+
 </head>
 
 <body>
+    <div class="container">
+
+        <?php
+
+
+        if ($insert) {
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Successfully!</strong> Account Successfully created.
+<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+</div>";
+        }
+
+
+        if ($update) {
+            echo "<div class='alert alert-primary alert-dismissible fade show' role='alert'>
+<strong>Successfully!</strong> Account Successfully Updated.
+<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+</div>";
+        }
+
+
+
+
+
+        ?>
+
+
+
+
+    </div>
+
+
+
+
     <!-- Button trigger modal -->
     <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
@@ -101,7 +145,7 @@ if (isset($_POST["email"])) {
         </form>
     </div>
     <div class="container">
-        <table class="table">
+        <table class="table table-striped table-hover" id="myTable">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -134,7 +178,6 @@ if (isset($_POST["email"])) {
             </tbody>
         </table>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         editkaro = document.getElementsByClassName("edit");
         Array.from(editkaro).forEach((index) => {
@@ -160,6 +203,14 @@ if (isset($_POST["email"])) {
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+    <script>
+        let table = new DataTable('#myTable');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
 </body>
 
 </html>
