@@ -5,11 +5,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     require 'base/connection.php';
 
 
-    $username = $_POST["username"];
     $useremail = $_POST["useremail"];
     $password = $_POST["userpass"];
-    $confirmpassword = $_POST["usercpass"];
-    $contact = $_POST["usercontact"];
 
 
 
@@ -21,24 +18,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $row = mysqli_num_rows($result); //1
 
 
-    if ($row > 0) {
-        echo "useremail already exist";
-    } else {
+    if ($row ==1) {
+       
 
-        if ($password == $confirmpassword) {
+     while ($item = mysqli_fetch_assoc($result)) {
+            
 
-            $hashpasss= password_hash($password,PASSWORD_DEFAULT);
 
-            $sqlinsert = "INSERT INTO `info`( `Name`, `Email`, `Password`, `Contact`) VALUES ('$username','$useremail','$hashpasss','$contact')";
+           password_verify($password,$item["Password"]);
+           session_start();
 
-            $resultins = mysqli_query($connection, $sqlinsert);
-            if ($resultins) {
-                echo "inserted";
-            }
-        } else {
-            echo "password doesnot match";
+           $_SESSION["login"]=true;
+
+           $_SESSION["email"]=$useremail;
+
+           header("location:welcome.php");
+
+
+
         }
-    }
+
+
+
+    } 
+
+    
+       
 }
 
 
@@ -315,6 +320,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+
 <?php include "base/navbar.php"; ?>
     <div class="form-bg">
         <div class="container">
@@ -329,12 +335,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </h4>
                         </div>
                         <div class="right-content">
-                            <h3 class="form-title">SignUp</h3>
-                            <form class="form-horizontal" action="signup.php" method="post">
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <input type="text" name="username" class="form-control">
-                                </div>
+                            <h3 class="form-title">Login</h3>
+                            <form class="form-horizontal" action="login.php" method="post">
+
                                 <div class="form-group">
                                     <label> Email</label>
                                     <input type="email" name="useremail" class="form-control">
@@ -343,14 +346,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <label>Password</label>
                                     <input type="password" name="userpass" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label>Confirm Password</label>
-                                    <input type="password" name="usercpass" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Contact</label>
-                                    <input type="text" name="usercontact" class="form-control">
-                                </div>
+
+
                                 <input type="submit" class="btn signin" value="signup" />
 
                                 <a href="" class="forgot">Forgot Password</a>
